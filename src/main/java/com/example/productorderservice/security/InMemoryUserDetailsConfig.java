@@ -13,16 +13,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class InMemoryUserDetailsConfig {
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
         manager.createUser(User.withUsername("user")
-            .password(passwordEncoder().encode("password"))
+            .password(passwordEncoder.encode("password"))
             .roles("USER")
             .build());
 
         manager.createUser(User.withUsername("admin")
-            .password(passwordEncoder().encode("admin"))
+            .password(passwordEncoder.encode("admin"))
             .roles("ADMIN")
             .build());
 

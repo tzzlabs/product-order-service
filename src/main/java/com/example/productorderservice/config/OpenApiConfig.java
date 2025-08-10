@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.Components;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class OpenApiConfig {
@@ -16,13 +17,14 @@ public class OpenApiConfig {
     private static final String SECURITY_SCHEME_NAME = "basicAuth";
 
     @Bean
+    @Primary
     public OpenAPI productOrderServiceOpenAPI() {
         return new OpenAPI()
-            .info(new Info()
+        	.info(new Info()
                 .title("Product Order Service API")
                 .description("CRUD APIs for managing product orders")
-                .version("1.0")
-                .contact(new Contact().name("Your Team").email("support@example.com")))
+                .version("1.0.0")
+                .contact(new Contact().name("Your Team").email("tchaudhari320@gmail.com")))
             .components(new Components()
                 .addSecuritySchemes(SECURITY_SCHEME_NAME,
                     new SecurityScheme()
