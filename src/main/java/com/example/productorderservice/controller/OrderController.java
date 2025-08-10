@@ -1,9 +1,12 @@
 package com.example.productorderservice.controller;
 
-import com.example.productorderservice.model.Order;
+import com.example.productorderservice.dto.OrderRequest;
+import com.example.productorderservice.dto.OrderResponse;
 import com.example.productorderservice.service.OrderService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,31 +20,31 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseEntity<List<OrderResponse>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable Long id) {
-        Order order = orderService.getOrderById(id);
-        if (order != null)
-            return ResponseEntity.ok(order);
-        else
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable Long id) {
+        OrderResponse response = orderService.getOrderById(id);
+        if (response == null) {
             return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest orderRequest) {
+        return ResponseEntity.ok(orderService.createOrder(orderRequest));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order order) {
-        Order updatedOrder = orderService.updateOrder(id, order);
-        if (updatedOrder != null)
-            return ResponseEntity.ok(updatedOrder);
-        else
+    public ResponseEntity<OrderResponse> updateOrder(@PathVariable Long id, @Valid @RequestBody OrderRequest orderRequest) {
+        OrderResponse response = orderService.updateOrder(id, orderRequest);
+        if (response == null) {
             return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
