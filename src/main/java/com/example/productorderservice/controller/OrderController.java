@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,11 +21,13 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')") // Only admins can view all orders
     public ResponseEntity<List<OrderResponse>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')") // Both users and admins can view specific orders
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable Long id) {
         OrderResponse response = orderService.getOrderById(id);
         if (response == null) {
@@ -34,11 +37,13 @@ public class OrderController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')") // Both users and admins can create orders
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest orderRequest) {
         return ResponseEntity.ok(orderService.createOrder(orderRequest));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // Only admins can update orders for now
     public ResponseEntity<OrderResponse> updateOrder(@PathVariable Long id, @Valid @RequestBody OrderRequest orderRequest) {
         OrderResponse response = orderService.updateOrder(id, orderRequest);
         if (response == null) {
@@ -48,6 +53,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // Only admins can delete orders for now
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
