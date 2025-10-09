@@ -11,7 +11,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig {
+public class SecurityConfig_old {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
